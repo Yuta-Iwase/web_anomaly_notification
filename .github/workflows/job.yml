@@ -1,0 +1,24 @@
+name: Periodic Curl Job
+permissions:
+  contents: write
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+
+jobs:
+  curl:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Install bs4
+      run: |
+        python -m pip install --upgrade pip
+        pip install beautifulsoup4
+
+    - name: Run Python script
+      env:
+        WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+      run: python get_web_info.py
